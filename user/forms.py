@@ -23,6 +23,22 @@ class UserRegisterForm(forms.ModelForm):
         return password1
 
 
+class UserLoginForm(forms.Form):
+    username=forms.CharField()
+    password=forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self):
+        username=self.cleaned_data.get("username")
+        password=self.cleaned_data.get("password")
+        user=CustomUser.objects.filter(username=username).first()
+        if user:
+            if not user.check_password(password):
+                raise ValidationError("Parol xato")
+        else:
+            raise ValidationError("Bunday foydalanuvchi topilmadi")
+
+        return self.cleaned_data
+
 
 
 
