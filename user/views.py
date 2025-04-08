@@ -1,8 +1,10 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, UserLoginForm
 from django.views.generic import TemplateView
 from django.contrib import messages
+
+from .models import CustomUser
 
 
 def home_page(request):
@@ -41,7 +43,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Xush kelibsiz, {username}!")
-                return redirect("bosh_sahifa")  # "bosh_sahifa" o'rniga "home_page"
+                return redirect("bosh_sahifa")
             else:
                 messages.error(request, "Login yoki parol noto'g'ri!")
         else:
@@ -53,3 +55,22 @@ def login_view(request):
         "form": form
     }
     return render(request, "login.html", context)
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")
+
+
+
+#Profile page  uchun view
+def profile_view(request,id):
+    user=CustomUser.objects.get(id=id)
+    context={
+        "user":user
+    }
+
+    return render(request,"profile.html",context)
+
+
