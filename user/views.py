@@ -1,59 +1,55 @@
-from django.contrib.auth import login,authenticate
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from .forms import UserRegisterForm,UserLoginForm
-from .models import CustomUser
-from django.views import View
+from .forms import UserRegisterForm, UserLoginForm
 from django.views.generic import TemplateView
-
+from django.contrib import messages
 
 
 def home_page(request):
-    return render(request,"home.html")
+    return render(request, "home.html")
+
 
 class HomePageView(TemplateView):
     template_name = "home.html"
 
 
-
-def signupview(request):
-    if request.method=='POST':
-        form=UserRegisterForm(request.POST)
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user=form.save(commit=False)
-            user.password=make_password(form.cleaned_data["password1"])
-            user.save()
+            user = form.save()  # Formaning o'zida password set qilinadi
+            messages.success(request, "Ro'yxatdan muvaffaqiyatli o'tdingiz! Endi tizimga kiring.")
             return redirect("login")
-
     else:
         form = UserRegisterForm()
 
-    context={
-        "form":form
+    context = {
+        "form": form
     }
-    return render(request,"signup.html",context)
+    return render(request, "signup.html", context)
 
 
 def login_view(request):
-    if request.method=="POST":
-        form=UserLoginForm(request.POST)
+    if request.method == "POST":
+        form = UserLoginForm(request.POST)
         if form.is_valid():
-            username=form.cleaned_data.get("username")
-            password=form.cleaned_data.get("password")
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
 
-            user=authenticate(request,username=username,password=password)
+            user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                login(request,user)
-                return redirect("bosh_sahifa")
+                login(request, user)
+                messages.success(request, f"Xush kelibsiz, {username}!")
+                return redirect("bosh_sahifa")  # "bosh_sahifa" o'rniga "home_page"
             else:
-                form.add_error("Bunday foydalanuvchi yo'q")
+                messages.error(request, "Login yoki parol noto'g'ri!")
+        else:
+            messages.error(request, "Formani to'ldirishda xatolik!")
     else:
-        form=UserLoginForm()
-    context={
-        "form":form
+        form = UserLoginForm()
+
+    context = {
+        "form": form
     }
-    return render(request,"login.html",context)
-
-
-
+    return render(request, "login.html", context)
