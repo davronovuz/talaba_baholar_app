@@ -2,6 +2,31 @@
 {% block title %}Bosh sahifa{% endblock title %}
 
 {% block content %}
-    <h3>Salom bu bosh sahifa</h3>
+    <div class="container mt-5">
+        <h3 class="text-center">O'quvchilar baholari</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Ism Familya</th>
+                  <th scope="col">Fan</th>
+                  <th scope="col">Baho</th>
+                  <th scope="col">Sana</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for baho in baholar%}
+                <tr>
+                  <th scope="row">{{ baho.id }}</th>
+                  <td>{{ baho.oquvchi }}</td>
+                  <td>{{ baho.fan }}</td>
+                  <td>{{ baho.baho }}</td>
+                  <td>{{ baho.created_at }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
 {% endblock content %}
 

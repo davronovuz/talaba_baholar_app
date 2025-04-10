@@ -1,18 +1,26 @@
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, UserLoginForm
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.contrib import messages
 
 from .models import CustomUser
+from grade.models import Baho,Sinf,Fan
 
 
 def home_page(request):
-    return render(request, "home.html")
+    baholar = Baho.objects.all()
+    context = {
+        "baholar": baholar
+    }
+    return render(request, "home.html",context)
 
 
-class HomePageView(TemplateView):
+class HomePageView(ListView):
     template_name = "home.html"
+    context_object_name = "baholar"
+    model = Baho
+
 
 
 def signup_view(request):

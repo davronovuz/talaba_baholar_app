@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     updated_at=models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.username} - {self.phone}"
+        return f"{self.username}"
 
 
 
