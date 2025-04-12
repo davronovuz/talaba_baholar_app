@@ -3,30 +3,66 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h3 class="text-center">O'quvchilar baholari</h3>
-        <table class="table">
+        <h3 class="text-center">Barcha o'quvchilarning barcha fanlardan baholari</h3>
+        <table class="table table-striped">
             <thead>
                 <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Ism Familya</th>
-                  <th scope="col">Fan</th>
-                  <th scope="col">Baho</th>
-                  <th scope="col">Sana</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Ism Familya</th>
+                    <th scope="col">Fan</th>
+                    <th scope="col">Baho</th>
+                    <th scope="col">Sana</th>
                 </tr>
             </thead>
             <tbody>
-            {% for baho in baholar%}
+            {% for baho in page_obj %}
                 <tr>
-                  <th scope="row">{{ baho.id }}</th>
-                  <td>{{ baho.oquvchi }}</td>
-                  <td>{{ baho.fan }}</td>
-                  <td>{{ baho.baho }}</td>
-                  <td>{{ baho.created_at }}</td>
+                    <th scope="row">{{ baho.id }}</th>
+                    <td><a href="{% url 'bahos' baho.oquvchi.id %}">{{ baho.oquvchi }}</a></td>
+                    <td>{{ baho.fan }}</td>
+                    <td>{{ baho.baho }}</td>
+                    <td>{{ baho.created_at }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Hozircha baho yo‘q!</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
+        <!-- Pagination qismi -->
+        <div class="container mt-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <!-- Avvalgi tugma -->
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Avvalgi</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Avvalgi</span>
+                        </li>
+                    {% endif %}
+
+                    <!-- Joriy sahifa raqami -->
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+
+                    <!-- Keyingi tugma -->
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Keyingi</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Keyingi</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </div>
 {% endblock content %}
-

@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate, logout
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, UserLoginForm
 from django.views.generic import TemplateView, ListView
@@ -10,10 +11,15 @@ from grade.models import Baho,Sinf,Fan
 
 def home_page(request):
     baholar = Baho.objects.all()
+    paginator=Paginator(baholar,7)
+    page_number=request.GET.get('page')
+    page_obj=paginator.get_page(page_number)
+
     context = {
-        "baholar": baholar
+        'page_obj':page_obj
+
     }
-    return render(request, "home.html",context)
+    return render(request, "home.html", context)
 
 
 class HomePageView(ListView):

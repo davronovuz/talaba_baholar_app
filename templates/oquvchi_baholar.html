@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Bosh sahifa{% endblock title %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h3 class="text-center"> Talaba <i>{{ oquvchi }}</i> ning barcha fanlardan baholari</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Fan</th>
+                    <th scope="col">Baho</th>
+                    <th scope="col">Sana</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for baho in baholar %}
+                <tr>
+                    <th scope="row">{{ baho.id }}</th>
+                    <td>{{ baho.fan }}</td>
+                    <td>{{ baho.baho }}</td>
+                    <td>{{ baho.created_at }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Hozircha baho yo‘q!</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock content %}
